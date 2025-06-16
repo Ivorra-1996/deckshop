@@ -14,9 +14,57 @@ The following guides illustrate how to use some features concretely:
 * [Building a Reactive RESTful Web Service](https://spring.io/guides/gs/reactive-rest-service/)
 
 ### Maven Parent overrides
+```text
+Debido al diseño de Maven, los elementos se heredan del POM padre al POM del proyecto.
+Si bien la mayor parte de la herencia es correcta, también hereda elementos no deseados como `<license>` y `<developers>` del padre.
+Para evitar esto, el POM del proyecto contiene anulaciones vacías para estos elementos.
+Si cambia manualmente a un padre diferente y realmente desea la herencia, debe eliminar esas anulaciones.
+```
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+## Estructura del Proyecto(Hexagonal):
+> Este proyecto sigue la **arquitectura hexagonal** (Ports and Adapters) para mantener una separación clara entre el dominio, la lógica de aplicación y la infraestructura.  
+> Los paquetes están organizados según su responsabilidad dentro del sistema, facilitando testeo, mantenimiento y escalabilidad.
+## Estructura del Proyecto
+
+```text
+src/main/java/deckshop/spring/
+│
+├── domain/
+│   └── user/
+│       ├── model/
+│       │   └── User.java                      # Entidad de dominio
+│       └── port/
+│           ├── in/
+│           │   └── ManageUserUseCase.java    # Puerto de entrada (interface)
+│           └── out/
+│               └── UserRepositoryPort.java   # Puerto de salida (interface)
+│
+├── application/
+│   ├── service/
+│   │   └── UserUseCaseService.java           # Implementación de casos de uso
+│   │
+│   ├── dto/
+│   │   └── UserDTO.java                      # Aquí van los DTOs internos si los usás
+│   │
+│   ├── mapper/
+│   │   └── UserMapper.java                   # Mapeadores entre entidades y DTOs
+│   │
+│   └── port/
+│       ├── in/
+│       │   └── (vacío por ahora)             # Interfaces internas (opcional)
+│       └── out/
+│           └── (vacío por ahora)             # Interfaces para acceso externo (opcional)
+│
+├── infrastructure/
+│   ├── in/
+│   │   └── rest/
+│   │       └── UserController.java           # Controlador REST
+│   │
+│   └── out/
+│       └── user/
+│           └── InMemoryUserRepository.java   # Implementación temporal de persistencia
+│
+├── DeckshopApplication.java                  # Inicio del back :D
+```
+
 
