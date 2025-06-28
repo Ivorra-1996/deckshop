@@ -61,6 +61,8 @@ src/main/java/deckshop/spring/
 │   │       └── UserController.java           # Controlador REST
 │   │
 │   └── out/
+│       └── db/
+│           └── PostgresUserRepository.java   # Interfaz
 │       └── user/
 │           └── InMemoryUserRepository.java   # Implementación temporal de persistencia
 │

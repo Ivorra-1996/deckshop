@@ -9,5 +9,5 @@ public interface ManageUserUseCase {
     User createUser(User user);
     void deleteUser(Long id);
     void updateAll(Long id, User user);
-    void specificUpdate(Long id);
+//    void specificUpdate(Long id, User user);
 }

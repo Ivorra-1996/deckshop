@@ -18,22 +18,22 @@ public class UserUseCaseService implements ManageUserUseCase {
 
     @Override
     public User searchbyID(Long id) {
-        return repository.searchbyID(id);
+        return repository.findUserById(id);
     }
 
     @Override
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll();
     }
 
     @Override
     public User createUser(User user) {
-        return repository.createUser(user);
+        return repository.save(user);
     }
 
     @Override
     public void deleteUser(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class UserUseCaseService implements ManageUserUseCase {
         repository.updateAll(id, user);
     }
 
-    @Override
-    public void specificUpdate(Long id) {
-        repository.specificUpdate(id);
-    }
+//    @Override
+//    public void specificUpdate(Long id, User user) {
+//        //repository.specificUpdate(id);
+//    }
 }

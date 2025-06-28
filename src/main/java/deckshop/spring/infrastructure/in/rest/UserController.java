@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
+// Maneja las petticioens de los usuarios que recibe y que devuelve.
 public class UserController {
 
     private final ManageUserUseCase userUseCase;
@@ -18,6 +19,17 @@ public class UserController {
     public UserController(ManageUserUseCase userUseCase) {
         this.userUseCase = userUseCase;
     }
+
+    // ⚠️ IMPORTANTE:
+    // En esta capa (Controller) usamos UserDTO tanto como parámetro de entrada (@RequestBody),
+    // como valor de salida (return).
+    // Esto es porque el DTO representa la estructura que se expone al exterior (cliente/Frontend),
+    // y nos permite:
+    // - Controlar qué datos entran y salen (evitar exponer campos sensibles como 'pass', 'rol', etc.).
+    // - Desacoplar la lógica de dominio del formato de datos usado en la API.
+    // - Mantener la arquitectura hexagonal limpia: el dominio trabaja con 'User', no con DTOs.
+    // Los mapeos entre DTO <-> Dominio se hacen usando el UserMapper.
+
 
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable Long id) {
@@ -33,8 +45,8 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDTO postUser(@RequestBody User user) {
-        return UserMapper.toDTO(userUseCase.createUser(UserMapper.toDomain(user)));
+    public UserDTO postUser(@RequestBody UserDTO userDTO) {
+        return UserMapper.toDTO(userUseCase.createUser(UserMapper.toDomain(userDTO)));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -43,13 +55,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public void putUser(@PathVariable Long id, @RequestBody User user) {
-        userUseCase.updateAll(id, UserMapper.toDomain(user));
+    public void putUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        userUseCase.updateAll(id, UserMapper.toDomain(userDTO));
     }
 
-    @PatchMapping("/specific/{id}")
-    public void patchUser(@PathVariable Long id) {
-        userUseCase.specificUpdate(id);
-    }
+//    @PatchMapping("/specific/{id}")
+//    public void patchUser(@PathVariable Long id, @RequestBody User user) {
+//        //userUseCase.specificUpdate(id);
+//    }
 
 }
