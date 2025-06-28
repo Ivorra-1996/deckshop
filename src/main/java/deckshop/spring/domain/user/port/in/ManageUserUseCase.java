@@ -6,7 +6,7 @@ import java.util.List;
 public interface ManageUserUseCase {
     User searchbyID(Long id);
     List<User> getAll();
-    User createUser(User user);
+    void createUser(User user);
     void deleteUser(Long id);
     void updateAll(Long id, User user);
 //    void specificUpdate(Long id, User user);

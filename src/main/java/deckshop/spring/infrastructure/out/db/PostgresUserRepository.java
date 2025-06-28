@@ -37,9 +37,9 @@ public class PostgresUserRepository implements UserRepositoryPort {
     }
 
     @Override
-    public User save(User user) {
+    public void save(User user) {
         UserEntity entity = UserEntityMapper.toEntity(user);
-        return UserEntityMapper.toDomain(repository.save(entity));
+        repository.save(entity);
     }
 
     @Override

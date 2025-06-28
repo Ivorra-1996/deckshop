@@ -27,8 +27,8 @@ public class UserUseCaseService implements ManageUserUseCase {
     }
 
     @Override
-    public User createUser(User user) {
-        return repository.save(user);
+    public void createUser(User user) {
+         repository.save(user);
     }
 
     @Override

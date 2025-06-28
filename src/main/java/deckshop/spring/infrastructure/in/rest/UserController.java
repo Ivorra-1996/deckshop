@@ -2,11 +2,15 @@ package deckshop.spring.infrastructure.in.rest;
 
 import deckshop.spring.application.dto.UserDTO;
 import deckshop.spring.application.mapper.UserMapper;
-import deckshop.spring.domain.user.model.User;
 import deckshop.spring.domain.user.port.in.ManageUserUseCase;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,8 +49,29 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDTO postUser(@RequestBody UserDTO userDTO) {
-        return UserMapper.toDTO(userUseCase.createUser(UserMapper.toDomain(userDTO)));
+    public ResponseEntity<?> postUser(@RequestBody UserDTO userDTO) {
+        try {
+            userUseCase.createUser(UserMapper.toDomain(userDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Created successfully");
+        } catch (DataIntegrityViolationException e) {
+            String message = e.getMostSpecificCause().getMessage();
+
+            // Regex para extraer una parte del texto del error
+            Pattern pattern = Pattern.compile("\\(([^)]+)\\)=\\(([^)]+)\\)");
+            Matcher matcher = pattern.matcher(message);
+
+            if (matcher.find()) {
+                String campo = matcher.group(1);
+                String mensajeLimpio = "Ya esta en uso el " + campo;
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(mensajeLimpio);
+            }
+
+            // Si no se puede extraer, muestra el mensaje general
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de restricción de unicidad.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error inesperado: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{id}")

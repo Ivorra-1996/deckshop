@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserRepositoryPort {
     User findUserById(Long id);
     List<User> findAll();
-    User save(User user);
+    void save(User user);
     void deleteById(Long id);
     void updateAll(Long id, User user);
 

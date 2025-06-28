@@ -17,24 +17,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String nombre;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String apellido;
     @Column(unique = true, nullable = false)
     private String dni;
     @Column(unique = true, nullable = false)
     private String usuario;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String pass;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String direccion;
     @Column(unique = true, nullable = false)
     private String mail;
     @Column(unique = true, nullable = false)
     private String telefono;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String fechaDeNacimiento;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String rol;
 }
