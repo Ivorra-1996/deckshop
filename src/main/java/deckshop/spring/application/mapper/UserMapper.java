@@ -1,6 +1,6 @@
 package deckshop.spring.application.mapper;
 
-import deckshop.spring.application.dto.UserDTO;
+import deckshop.spring.application.dto.user.UserDTO;
 import deckshop.spring.domain.user.model.User;
 
 // Mapper para convertir entre UserDTO <-> User (modelo de dominio)

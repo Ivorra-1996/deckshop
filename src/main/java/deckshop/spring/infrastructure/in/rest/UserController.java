@@ -1,6 +1,7 @@
 package deckshop.spring.infrastructure.in.rest;
 
-import deckshop.spring.application.dto.UserDTO;
+import deckshop.spring.application.dto.user.LoginRequestDTO;
+import deckshop.spring.application.dto.user.UserDTO;
 import deckshop.spring.application.mapper.UserMapper;
 import deckshop.spring.domain.user.port.in.ManageUserUseCase;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,8 +37,17 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public UserDTO getUser(@PathVariable Long id) {
-        return UserMapper.toDTO(userUseCase.searchbyID(id));
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        try {
+            UserDTO dto = UserMapper.toDTO(userUseCase.searchbyID(id));
+            if (dto.getId() == 0){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
+            }
+            return ResponseEntity.status(HttpStatus.FOUND).body(dto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error inesperado: " + e.getMessage());
+        }
     }
 
     @GetMapping
@@ -48,8 +58,8 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping
-    public ResponseEntity<?> postUser(@RequestBody UserDTO userDTO) {
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
         try {
             userUseCase.createUser(UserMapper.toDomain(userDTO));
             return ResponseEntity.status(HttpStatus.CREATED).body("Created successfully");
@@ -62,16 +72,22 @@ public class UserController {
 
             if (matcher.find()) {
                 String campo = matcher.group(1);
-                String mensajeLimpio = "Ya esta en uso el " + campo;
+                char mayuscula = campo.toUpperCase().charAt(0);
+                String mensajeLimpio = mayuscula + campo.substring(1, campo.length()).toLowerCase()  + " en uso."  ;
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(mensajeLimpio);
             }
 
             // Si no se puede extraer, muestra el mensaje general
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Violación de restricción de unicidad.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Body incompleto.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error inesperado: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginRequestDTO){
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 
     @DeleteMapping("/delete/{id}")

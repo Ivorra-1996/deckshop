@@ -1,5 +1,7 @@
 package deckshop.spring.application.service;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import deckshop.spring.domain.user.model.User;
 import deckshop.spring.domain.user.port.in.ManageUserUseCase;
 import deckshop.spring.domain.user.port.out.UserRepositoryPort;
@@ -28,8 +30,13 @@ public class UserUseCaseService implements ManageUserUseCase {
 
     @Override
     public void createUser(User user) {
-         repository.save(user);
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        String hash = argon2.hash(1, 1024, 1, user.getPass());
+        user.setPass(hash);
+        repository.save(user);
     }
+
+
 
     @Override
     public void deleteUser(Long id) {

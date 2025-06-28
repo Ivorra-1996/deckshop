@@ -1,4 +1,4 @@
-package deckshop.spring.application.dto;
+package deckshop.spring.application.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;
