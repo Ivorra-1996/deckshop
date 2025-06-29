@@ -23,8 +23,6 @@ public class User {
     private String apellido;
     @Column(unique = true, nullable = false)
     private String dni;
-    @Column(unique = true, nullable = false)
-    private String usuario;
     @Column(nullable = false)
     private String pass;
     @Column(nullable = false)
@@ -35,6 +33,8 @@ public class User {
     private String telefono;
     @Column(nullable = false)
     private String fechaDeNacimiento;
+    @Column(nullable = false)
+    private String edad;
     @Column(nullable = false)
     private String rol;
 }

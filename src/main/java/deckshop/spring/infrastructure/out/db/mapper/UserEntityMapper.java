@@ -11,12 +11,12 @@ public class UserEntityMapper {
                 user.getNombre(),
                 user.getApellido(),
                 user.getDni(),
-                user.getUsuario(),
                 user.getPass(),
                 user.getDireccion(),
                 user.getMail(),
                 user.getTelefono(),
                 user.getFechaDeNacimiento(),
+                user.getEdad(),
                 user.getRol()
         );
     }
@@ -27,12 +27,12 @@ public class UserEntityMapper {
                 entity.getNombre(),
                 entity.getApellido(),
                 entity.getDni(),
-                entity.getUsuario(),
                 entity.getPass(),
                 entity.getDireccion(),
                 entity.getMail(),
                 entity.getTelefono(),
                 entity.getFechaDeNacimiento(),
+                entity.getEdad(),
                 entity.getRol()
         );
     }

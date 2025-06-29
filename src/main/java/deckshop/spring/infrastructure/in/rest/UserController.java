@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
         try {
             userUseCase.createUser(UserMapper.toDomain(userDTO));
             return ResponseEntity.status(HttpStatus.CREATED).body("Created successfully");
@@ -85,9 +85,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginRequestDTO){
-        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
+        try {
+            userUseCase.verifyAccount(loginRequest);
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        }
     }
 
     @DeleteMapping("/delete/{id}")

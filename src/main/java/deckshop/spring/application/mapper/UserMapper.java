@@ -13,12 +13,12 @@ public class UserMapper {
                 user.getNombre(),
                 user.getApellido(),
                 user.getDni(),
-                user.getUsuario(),
                 user.getPass(),
                 user.getDireccion(),
                 user.getMail(),
                 user.getTelefono(),
                 user.getFechaDeNacimiento(),
+                user.getEdad(),
                 user.getRol()
         );
     }
@@ -31,11 +31,11 @@ public class UserMapper {
             dto.setNombre(user.getNombre());
             dto.setApellido(user.getApellido());
             dto.setDni(user.getDni());
-            dto.setUsuario(user.getUsuario());
             dto.setDireccion(user.getDireccion());
             dto.setMail(user.getMail());
             dto.setTelefono(user.getTelefono());
             dto.setFechaDeNacimiento(user.getFechaDeNacimiento());
+            dto.setEdad(user.getEdad());
             dto.setRol(user.getRol());
             return dto;
         } catch (NullPointerException e) {

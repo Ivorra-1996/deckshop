@@ -9,11 +9,11 @@ public class UserDTO {
     private String nombre;
     private String apellido;
     private String dni;
-    private String usuario;
     private String pass;
     private String direccion;
     private String mail;
     private String telefono;
     private String fechaDeNacimiento;
+    private String edad;
     private String rol;
 }
