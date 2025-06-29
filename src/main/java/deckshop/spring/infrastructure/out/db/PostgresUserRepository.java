@@ -59,8 +59,19 @@ public class PostgresUserRepository implements UserRepositoryPort {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void removeUserBD(Long id) {
+        Optional<UserEntity> existingUserOpt = repository.findById(id);
 
+        if (existingUserOpt.isPresent()) {
+            UserEntity entity = existingUserOpt.get();
+
+            // Anonimizamos los campos
+            entity.setEstado("ELIMINADO");
+            entity.setPass("");
+            entity.setMail("");
+
+            repository.save(entity);
+        }
     }
 
     @Override

@@ -22,4 +22,5 @@ public class UserEntity {
     private String fechaDeNacimiento;
     private String edad;
     private String rol;
+    private String estado;
 }

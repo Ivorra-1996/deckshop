@@ -96,8 +96,13 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userUseCase.deleteUser(id);
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        try {
+            userUseCase.userExistenceVerification(id);
+            return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el usuario!");
+        }
     }
 
     @PutMapping("/{id}")

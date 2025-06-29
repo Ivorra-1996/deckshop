@@ -17,7 +17,8 @@ public class UserEntityMapper {
                 user.getTelefono(),
                 user.getFechaDeNacimiento(),
                 user.getEdad(),
-                user.getRol()
+                user.getRol(),
+                user.getEstado()
         );
     }
 
@@ -33,7 +34,8 @@ public class UserEntityMapper {
                 entity.getTelefono(),
                 entity.getFechaDeNacimiento(),
                 entity.getEdad(),
-                entity.getRol()
+                entity.getRol(),
+                entity.getEstado()
         );
     }
 }

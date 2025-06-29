@@ -16,4 +16,5 @@ public class UserDTO {
     private String fechaDeNacimiento;
     private String edad;
     private String rol;
+    private String estado;
 }

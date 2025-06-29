@@ -37,4 +37,6 @@ public class User {
     private String edad;
     @Column(nullable = false)
     private String rol;
+    @Column(nullable = false)
+    private String estado;
 }

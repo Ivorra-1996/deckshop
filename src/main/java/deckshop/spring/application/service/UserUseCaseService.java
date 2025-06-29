@@ -69,7 +69,6 @@ public class UserUseCaseService implements ManageUserUseCase {
         } else if (cellularVerification(account)) {
             user = repository.findByAccount(account);
         } else {
-            System.out.println("No es un celular o email");
             throw new IllegalArgumentException();
         }
 
@@ -87,9 +86,13 @@ public class UserUseCaseService implements ManageUserUseCase {
         }
     }
 
-    @Override
-    public void deleteUser(Long id) {
-        repository.deleteById(id);
+    public void userExistenceVerification(Long id) {
+        User user = searchbyID(id);
+        if (user != null){
+            repository.removeUserBD(id);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

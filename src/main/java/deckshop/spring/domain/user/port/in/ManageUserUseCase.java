@@ -9,7 +9,7 @@ public interface ManageUserUseCase {
     List<User> getAll();
     void createUser(User user);
     void verifyAccount(LoginRequestDTO loginRequestDTO);
-    void deleteUser(Long id);
+    void userExistenceVerification(Long id);
     void updateAll(Long id, User user);
 //    void specificUpdate(Long id, User user);
 }
