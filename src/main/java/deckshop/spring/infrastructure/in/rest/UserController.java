@@ -105,10 +105,24 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
-    public void putUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        userUseCase.updateAll(id, UserMapper.toDomain(userDTO));
+    @PutMapping("/modify")
+    public ResponseEntity<?> putUser(@RequestBody UserDTO userDTO) {
+        try {
+            userUseCase.updateAll(UserMapper.toDomain(userDTO));
+            return ResponseEntity.status(HttpStatus.OK).body("Updated user!");
+        } catch (IllegalArgumentException e) {
+            String mensaje = e.getMessage();
+
+            if ("No existe el usuario!".equals(mensaje)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+            }
+
+            // Otros errores por defecto
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
+        }
     }
+
+
 
 //    @PatchMapping("/specific/{id}")
 //    public void patchUser(@PathVariable Long id, @RequestBody User user) {

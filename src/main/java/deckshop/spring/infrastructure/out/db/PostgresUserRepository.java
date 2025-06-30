@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -75,8 +76,21 @@ public class PostgresUserRepository implements UserRepositoryPort {
     }
 
     @Override
-    public void updateAll(Long id, User user) {
+    public void updateAll(User userBody, User userBD) {
+        // Nose que tan bueno sea esto, pero no me deja tranquilo...
+        UserEntity entity = new UserEntity(
+                userBD.getId(), userBD.getNombre(), userBD.getApellido(), userBD.getDni(),
+                userBD.getPass(),userBD.getDireccion(),userBD.getMail(),userBD.getTelefono(),
+                userBD.getFechaDeNacimiento(),userBD.getEdad(),userBD.getRol(),userBD.getEstado());
 
+        entity.setNombre(userBody.getNombre());
+        entity.setApellido(userBody.getApellido());
+        entity.setDni(userBody.getDni());
+        entity.setDireccion(userBody.getDireccion());
+        entity.setFechaDeNacimiento(userBody.getFechaDeNacimiento());
+        entity.setEdad(userBody.getEdad());
+
+        repository.save(entity);
     }
 
 }

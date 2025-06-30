@@ -10,6 +10,6 @@ public interface ManageUserUseCase {
     void createUser(User user);
     void verifyAccount(LoginRequestDTO loginRequestDTO);
     void userExistenceVerification(Long id);
-    void updateAll(Long id, User user);
+    void updateAll(User user);
 //    void specificUpdate(Long id, User user);
 }
