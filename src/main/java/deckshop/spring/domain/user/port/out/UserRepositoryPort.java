@@ -1,10 +1,8 @@
 package deckshop.spring.domain.user.port.out;
 
 import deckshop.spring.domain.user.model.User;
-import deckshop.spring.infrastructure.out.db.entity.UserEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserRepositoryPort {
     User findUserById(Long id);
@@ -13,6 +11,7 @@ public interface UserRepositoryPort {
     User findByAccount(String cuenta);
     void removeUserBD(Long id);
     void updateAll(User userBody, User userBD);
+    User findEmail(String email);
 
 //    @Modifying
 //    @Query("UPDATE User u SET u.algo = :valor WHERE u.id = :id")

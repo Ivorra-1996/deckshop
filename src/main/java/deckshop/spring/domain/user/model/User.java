@@ -27,7 +27,7 @@ public class User {
     private String pass;
     @Column(nullable = false)
     private String direccion;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String mail;
     @Column(unique = true, nullable = false)
     private String telefono;

@@ -1,6 +1,5 @@
 package deckshop.spring.infrastructure.out.db;
 
-import deckshop.spring.application.dto.user.LoginRequestDTO;
 import deckshop.spring.domain.user.model.User;
 import deckshop.spring.domain.user.port.out.UserRepositoryPort;
 import deckshop.spring.infrastructure.out.db.entity.UserEntity;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -93,4 +91,15 @@ public class PostgresUserRepository implements UserRepositoryPort {
         repository.save(entity);
     }
 
+    @Override
+    public User findEmail(String email){
+        // El Optional se usa cuando puede existir el usuario o no, en este caso null.
+        Optional<UserEntity> entity = Optional.empty();
+
+        if (email.contains("@")) {
+            entity = repository.findByMail(email);
+        }
+
+        return entity.map(UserEntityMapper::toDomain).orElse(null);
+    }
 }

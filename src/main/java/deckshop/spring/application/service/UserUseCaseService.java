@@ -93,7 +93,17 @@ public class UserUseCaseService implements ManageUserUseCase {
         return edad >= 13 && edad <= 120;
     }
 
+    private boolean existTheEmail(String email){
+        return repository.findEmail(email) != null;
+    }
+
     private IllegalArgumentException validationData(User user){
+        // Validador de existencia en la BD
+        if (existTheEmail(user.getMail())){
+            throw new IllegalArgumentException("Email en uso!");
+        }
+
+        // Validador de data
         if (!emailValidator(user.getMail())){
             throw new IllegalArgumentException("Email no valido!");
         } else if (!dniValidation(user.getDni())) {
