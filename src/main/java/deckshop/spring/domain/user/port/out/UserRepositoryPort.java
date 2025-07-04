@@ -12,6 +12,7 @@ public interface UserRepositoryPort {
     void removeUserBD(Long id);
     void updateAll(User userBody, User userBD);
     User findEmail(String email);
+    void updateEmail(String email, User user);
 
 //    @Modifying
 //    @Query("UPDATE User u SET u.algo = :valor WHERE u.id = :id")

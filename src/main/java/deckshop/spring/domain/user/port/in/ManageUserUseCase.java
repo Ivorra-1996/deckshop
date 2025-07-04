@@ -11,5 +11,6 @@ public interface ManageUserUseCase {
     void verifyAccount(LoginRequestDTO loginRequestDTO);
     void userExistenceVerification(Long id);
     void updateAll(User user);
+    void updateEmail(String email, Long id);
 //    void specificUpdate(Long id, User user);
 }

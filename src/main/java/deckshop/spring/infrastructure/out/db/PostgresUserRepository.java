@@ -75,11 +75,7 @@ public class PostgresUserRepository implements UserRepositoryPort {
 
     @Override
     public void updateAll(User userBody, User userBD) {
-        // Nose que tan bueno sea esto, pero no me deja tranquilo...
-        UserEntity entity = new UserEntity(
-                userBD.getId(), userBD.getNombre(), userBD.getApellido(), userBD.getDni(),
-                userBD.getPass(),userBD.getDireccion(),userBD.getMail(),userBD.getTelefono(),
-                userBD.getFechaDeNacimiento(),userBD.getEdad(),userBD.getRol(),userBD.getEstado());
+        UserEntity entity = UserEntityMapper.toEntity(userBD);
 
         entity.setNombre(userBody.getNombre());
         entity.setApellido(userBody.getApellido());
@@ -102,4 +98,14 @@ public class PostgresUserRepository implements UserRepositoryPort {
 
         return entity.map(UserEntityMapper::toDomain).orElse(null);
     }
+
+    @Override
+    public void updateEmail(String newEmail, User user){
+        UserEntity entity = UserEntityMapper.toEntity(user);
+
+        entity.setMail(newEmail);
+
+        repository.save(entity);
+    }
+
 }

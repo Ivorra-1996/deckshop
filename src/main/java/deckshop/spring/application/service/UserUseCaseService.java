@@ -35,12 +35,13 @@ public class UserUseCaseService implements ManageUserUseCase {
         return repository.findAll();
     }
 
-    private Boolean emailValidator(String email){
-        String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@" +
-                "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,4})$";
+    private Boolean emailValidator(String email) {
+        if (email == null) return false; // Evita NullPointerException
+
+        String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         Pattern pattern = Pattern.compile(emailPattern);
         Matcher matcher = pattern.matcher(email);
-
+        System.out.println("email: " + email + " → " + matcher.matches());
         return matcher.matches();
     }
 
@@ -169,6 +170,8 @@ public class UserUseCaseService implements ManageUserUseCase {
 
     @Override
     public void updateAll(User userBody) {
+
+        // Aca usar la funcion validador de datos
         if (!dniValidation(userBody.getDni())) {
             throw new IllegalArgumentException("DNI inválido. Debe contener solo números y tener entre 7 y 9 dígitos.");
         }
@@ -205,6 +208,25 @@ public class UserUseCaseService implements ManageUserUseCase {
             }
         } else {
             throw new IllegalArgumentException("No existe el usuario!");
+        }
+    }
+
+    @Override
+    public void updateEmail(String email, Long id){
+        User existeUsuario = searchbyID(id);
+
+        if (!emailValidator(email)) {
+            throw new IllegalArgumentException("Email no valido!");
+        } else {
+            if ( existeUsuario != null) {
+                if (!Objects.equals(existeUsuario.getEstado(), "ELIMINADO")){
+                    repository.updateEmail(email, existeUsuario);
+                } else {
+                    throw new IllegalArgumentException("No tiene permisos para realizar esta acción!");
+                }
+            } else {
+                throw new IllegalArgumentException("No existe el usuario!");
+            }
         }
     }
 }

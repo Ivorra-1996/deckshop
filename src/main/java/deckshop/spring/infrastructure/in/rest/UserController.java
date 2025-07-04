@@ -1,5 +1,6 @@
 package deckshop.spring.infrastructure.in.rest;
 
+import deckshop.spring.application.dto.user.EmailRequest;
 import deckshop.spring.application.dto.user.LoginRequestDTO;
 import deckshop.spring.application.dto.user.UserDTO;
 import deckshop.spring.application.mapper.UserMapper;
@@ -122,11 +123,15 @@ public class UserController {
         }
     }
 
-
-
-//    @PatchMapping("/specific/{id}")
-//    public void patchUser(@PathVariable Long id, @RequestBody User user) {
-//        //userUseCase.specificUpdate(id);
-//    }
+    @PatchMapping("/modify-email/{id}")
+    public ResponseEntity<?> putEmail(@RequestBody EmailRequest emailReq, @PathVariable Long id){
+        try {
+            userUseCase.updateEmail(emailReq.getEmail(), id);
+            return ResponseEntity.status(HttpStatus.OK).body("Email actualizado!");
+        } catch (IllegalArgumentException e) {
+            String mensaje = e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
+        }
+    }
 
 }
