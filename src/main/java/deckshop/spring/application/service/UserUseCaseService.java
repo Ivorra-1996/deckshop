@@ -36,7 +36,8 @@ public class UserUseCaseService implements ManageUserUseCase {
     }
 
     private Boolean emailValidator(String email){
-        String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" + "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
+        String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,4})$";
         Pattern pattern = Pattern.compile(emailPattern);
         Matcher matcher = pattern.matcher(email);
 
@@ -44,12 +45,13 @@ public class UserUseCaseService implements ManageUserUseCase {
     }
 
     private Boolean cellularValidation(String numeroCelular) {
-        // qQuitamos espacios, guiones, paréntesis, etc.
-        String limpio = numeroCelular.replaceAll("[^\\d]", "");
+        // Debe contener exactamente 10 dígitos numéricos
+        if (!numeroCelular.matches("^\\d{10}$")) {
+            return false;
+        }
 
-        // - Empiece con 11 o 15
-        // - Tenga 10 u 11 dígitos en total (ej: 11 + 8 dígitos = 10 | 15 + 9 = 11)
-        return limpio.matches("^(11|15)\\d{8,9}$");
+        // Debe empezar con 11 o 15
+        return numeroCelular.startsWith("11") || numeroCelular.startsWith("15");
     }
 
     private boolean dniValidation(String numeroDNI) {
@@ -91,9 +93,26 @@ public class UserUseCaseService implements ManageUserUseCase {
         return edad >= 13 && edad <= 120;
     }
 
+    private IllegalArgumentException validationData(User user){
+        if (!emailValidator(user.getMail())){
+            throw new IllegalArgumentException("Email no valido!");
+        } else if (!dniValidation(user.getDni())) {
+            throw new IllegalArgumentException("DNI no valido!");
+        } else if (!directionValidation(user.getDireccion())) {
+            throw new IllegalArgumentException("Direccion invalida!");
+        } else if (!cellularValidation(user.getTelefono())) {
+            throw new IllegalArgumentException("Celular invalido!");
+        } else if (!validationDateOfBirth(user.getFechaDeNacimiento())) {
+            throw new IllegalArgumentException("Dia de nacimiento invalido!");
+        } else if (!ageValidation(user.getEdad())){
+            throw new IllegalArgumentException("Edad invalida!");
+        }
+        return null;
+    }
+
     @Override
     public void createUser(User user) {
-        // Validador de email
+        validationData(user);
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
         String hash = argon2.hash(3, 65536, 2, user.getPass());
         user.setPass(hash);
