@@ -41,7 +41,7 @@ public class UserUseCaseService implements ManageUserUseCase {
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         Pattern pattern = Pattern.compile(emailPattern);
         Matcher matcher = pattern.matcher(email);
-        System.out.println("email: " + email + " → " + matcher.matches());
+
         return matcher.matches();
     }
 
@@ -193,12 +193,12 @@ public class UserUseCaseService implements ManageUserUseCase {
 
         if (existe){
             // Solo deja actualizar usuarios que no fueron eliminados
-            boolean condicion = !Objects.equals(existingUserBD.getEstado(), "ELIMINADO") &
-                    !Objects.equals(existingUserBD.getMail(), "") &
-                    existingUserBD.getTelefono() != null;
+            boolean estaEliminado = !Objects.equals(existingUserBD.getEstado(), "ELIMINADO");
+            boolean emailVacio = !Objects.equals(existingUserBD.getMail(), "");
+            boolean telefonoVacio = !Objects.equals(existingUserBD.getTelefono(), "");
 
             try {
-                if (condicion){
+                if (estaEliminado & emailVacio & telefonoVacio){
                     repository.updateAll(userBody, existingUserBD);
                 } else {
                     throw new IllegalArgumentException("No tenés permitido realizar esta acción!");
@@ -218,6 +218,9 @@ public class UserUseCaseService implements ManageUserUseCase {
         if (!emailValidator(email)) {
             throw new IllegalArgumentException("Email no valido!");
         } else {
+            if (existTheEmail(email)){
+                throw new IllegalArgumentException("Email en uso!");
+            }
             if ( existeUsuario != null) {
                 if (!Objects.equals(existeUsuario.getEstado(), "ELIMINADO")){
                     repository.updateEmail(email, existeUsuario);
