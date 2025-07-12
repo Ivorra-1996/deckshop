@@ -8,20 +8,20 @@ public class UserMapper {
 
     // Convierte un DTO recibido desde la API a un objeto del dominio
     public static User toDomain(UserDTO user) {
-        return new User(
-                user.getId(),
-                user.getNombre(),
-                user.getApellido(),
-                user.getDni(),
-                user.getPass(),
-                user.getDireccion(),
-                user.getMail(),
-                user.getTelefono(),
-                user.getFechaDeNacimiento(),
-                user.getEdad(),
-                user.getRol(),
-                user.getEstado()
-        );
+        User domainUser = new User();
+        domainUser.setId(user.getId());
+        domainUser.setNombre(user.getNombre());
+        domainUser.setApellido(user.getApellido());
+        domainUser.setDni(user.getDni());
+        domainUser.setPass(user.getPass());
+        domainUser.setDireccion(user.getDireccion());
+        domainUser.setMail(user.getMail());
+        domainUser.setTelefono(user.getTelefono());
+        domainUser.setFechaDeNacimiento(user.getFechaDeNacimiento());
+        domainUser.setEdad(user.getEdad());
+        domainUser.setRol(user.getRol());
+        domainUser.setEstado(user.getEstado());
+        return domainUser;
     }
 
     // Convierte un objeto del dominio a un DTO para devolver al cliente

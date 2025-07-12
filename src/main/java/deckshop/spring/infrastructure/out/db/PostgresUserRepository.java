@@ -68,6 +68,9 @@ public class PostgresUserRepository implements UserRepositoryPort {
             entity.setEstado("ELIMINADO");
             entity.setPass("");
             entity.setMail("");
+            entity.setTelefono("");
+            entity.setDni("");
+
 
             repository.save(entity);
         }

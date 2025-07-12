@@ -1,4 +1,4 @@
-package deckshop.spring.infrastructure.in.rest;
+package deckshop.spring.infrastructure.in.rest.user;
 
 import deckshop.spring.application.dto.user.EmailRequest;
 import deckshop.spring.application.dto.user.LoginRequestDTO;
@@ -134,4 +134,11 @@ public class UserController {
         }
     }
 
+
+    // Completar actualizar contraseña solamente...
+    //
+//    @PatchMapping("/modify-pass")
+//    public ResponseEntity<?> putPass(@RequestBody PassRequest pass){
+//
+//    }
 }
