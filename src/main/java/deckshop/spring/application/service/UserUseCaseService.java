@@ -159,6 +159,7 @@ public class UserUseCaseService implements ManageUserUseCase {
         }
     }
 
+    @Override
     public void userExistenceVerification(Long id) {
         User user = searchbyID(id);
         if (user != null){

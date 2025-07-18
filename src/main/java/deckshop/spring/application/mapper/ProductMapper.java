@@ -1,27 +1,26 @@
 package deckshop.spring.application.mapper;
 
+import deckshop.spring.application.dto.product.ProductCreateDTO;
 import deckshop.spring.application.dto.product.ProductDTO;
-import deckshop.spring.application.dto.user.UserDTO;
 import deckshop.spring.domain.product.model.Product;
 import deckshop.spring.domain.user.model.User;
 
 public class ProductMapper {
     // Convierte un DTO recibido desde la API a un objeto del dominio
-    public static Product toDomain(ProductDTO product) {
-        Product domainProduct = new Product();
+    public static Product toDomain(ProductCreateDTO dto, User user) {
+        Product product = new Product();
 
-        domainProduct.setId(product.getId());
-        domainProduct.setNombre(product.getNombre());
-        domainProduct.setVendedorId(product.getVendedorId());
-        domainProduct.setPrecio(product.getPrecio());
-        domainProduct.setModelo(product.getModelo());
-        domainProduct.setDescripcion(product.getDescripcion());
-        domainProduct.setEstadoUso(product.getEstadoUso());
-        domainProduct.setCantidad(product.getCantidad());
-        domainProduct.setCreatedAt(product.getCreatedAt());
-        domainProduct.setUpdatedAt(product.getUpdatedAt());
+        product.setId(dto.getId());
+        product.setUsuario(user);
+        product.setPrecio(dto.getPrecio());
+        product.setNombre(dto.getNombre());
+        product.setModelo(dto.getModelo());
+        product.setDescripcion(dto.getDescripcion());
+        product.setEstadoUso(dto.getEstadoUso());
+        product.setCantidad(dto.getCantidad());
+        product.setEstadoDePublicacion(dto.getEstadoDePublicacion());
 
-        return domainProduct;
+        return product;
     }
 
     // Convierte un objeto del dominio a un DTO para devolver al cliente
@@ -30,14 +29,13 @@ public class ProductMapper {
         try {
             dto.setId(product.getId());
             dto.setNombre(product.getNombre());
-            dto.setVendedorId(product.getVendedorId());
+            dto.setUsuario(UserMapper.toDTO(product.getUsuario()));
             dto.setPrecio(product.getPrecio());
             dto.setModelo(product.getModelo());
             dto.setDescripcion(product.getDescripcion());
             dto.setEstadoUso(product.getEstadoUso());
             dto.setCantidad(product.getCantidad());
-            dto.setCreatedAt(product.getCreatedAt());
-            dto.setUpdatedAt(product.getUpdatedAt());
+            dto.setEstadoDePublicacion(product.getEstadoDePublicacion());
 
             return dto;
         } catch (NullPointerException e) {

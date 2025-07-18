@@ -3,6 +3,8 @@ package deckshop.spring.infrastructure.out.db.mapper;
 import deckshop.spring.domain.user.model.User;
 import deckshop.spring.infrastructure.out.db.entity.UserEntity;
 
+import java.util.ArrayList;
+
 public class UserEntityMapper {
 
     public static UserEntity toEntity(User user) {
@@ -18,7 +20,8 @@ public class UserEntityMapper {
                 user.getFechaDeNacimiento(),
                 user.getEdad(),
                 user.getRol(),
-                user.getEstado()
+                user.getEstado(),
+                new ArrayList<>()
         );
     }
 

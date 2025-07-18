@@ -1,6 +1,5 @@
 package deckshop.spring.application.dto.product;
 
-import deckshop.spring.application.dto.user.UserDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +7,10 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductCreateDTO {
     private Long id;
-    private UserDTO usuario;
+    private Long idUsuario;
+
     private BigDecimal precio;
     private String nombre;
     private String modelo;

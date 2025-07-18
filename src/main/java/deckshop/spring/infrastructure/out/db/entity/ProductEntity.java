@@ -1,8 +1,10 @@
-package deckshop.spring.domain.product.model;
+package deckshop.spring.infrastructure.out.db.entity;
 
-import deckshop.spring.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,30 +15,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "products")
-public class Product {
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //Relacion
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_usuario", nullable = false)
-    private User usuario;
+    private UserEntity usuario;
 
-    @Column(precision = 10, scale = 2)
     private BigDecimal precio;
-
     private String nombre;
     private String modelo;
-
-    @Column(columnDefinition = "TEXT")
     private String descripcion;
-
     @Column(name = "estado_uso")
     private String estadoUso;
-
     private Integer cantidad;
-
     private String estadoDePublicacion;
 
 }
