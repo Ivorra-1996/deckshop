@@ -20,9 +20,26 @@ public class PostgresProductRepository implements ProductRepositoryPort {
         this.repository = repository;
     }
 
+    // Lo borrO ?
     @Override
     public Product findProduct(Long id) {
         return repository.findById(id).map(ProductEntityMapper::toDomain).orElse(null);
+    }
+
+    @Override
+    public List<Product> findByNombreContainingIgnoreCase(String nombre) {
+        return repository.findByNombreContainingIgnoreCase(nombre)
+                .stream()
+                .map(ProductEntityMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Product> findByIdOrNombreContainingIgnoreCase(Long id, String nombre) {
+        return repository.findByIdOrNombreContainingIgnoreCase(id, nombre)
+                .stream()
+                .map(ProductEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override

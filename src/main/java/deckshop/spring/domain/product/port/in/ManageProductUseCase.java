@@ -8,12 +8,17 @@ import java.util.List;
 
 public interface ManageProductUseCase {
     Product searchbyID(Long id);
+    List<Product> searchByNombre(String nombre);
+    List<Product> searchByIdOrNombre(Long id, String nombre);
     List<Product> getAll();
     ResponseEntity<String> createProduct(Product product);
 
 //    void verifyAccount(LoginRequestDTO loginRequestDTO);
       void productExistenceVerification(Long id);
       void updateState(Long id);
+      void updateAmount(Long id);
 //    void updateEmail(String email, Long id);
 //    void specificUpdate(Long id, User user);
+
+    ResponseEntity<String> updateAll(Product productbody, Long id);
 }

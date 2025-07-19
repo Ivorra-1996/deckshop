@@ -10,4 +10,7 @@ public interface SpringDataProductRepository  extends JpaRepository<ProductEntit
 
     @EntityGraph(attributePaths = "usuario")
     List<ProductEntity> findAll();
+    List<ProductEntity> findByNombreContainingIgnoreCase(String nombre);
+    List<ProductEntity> findByIdOrNombreContainingIgnoreCase(Long id, String nombre);
+
 }

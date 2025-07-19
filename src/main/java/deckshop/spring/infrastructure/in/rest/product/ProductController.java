@@ -31,19 +31,31 @@ public class ProductController {
         this.productUseCase = productUseCase;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable Long id) {
-        try {
-            ProductDTO dto = ProductMapper.toDTO(productUseCase.searchbyID(id));
-            if (dto.getId() == 0){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
-            }
-            return ResponseEntity.status(HttpStatus.FOUND).body(dto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error inesperado: " + e.getMessage());
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> buscar(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String nombre) {
+
+        List<Product> productos;
+
+        if (id != null && nombre != null) {
+            productos = productUseCase.searchByIdOrNombre(id, nombre);
+        } else if (nombre != null) {
+            productos = productUseCase.searchByNombre(nombre);
+        } else if (id != null) {
+            Product p = productUseCase.searchbyID(id);
+            productos = p != null ? List.of(p) : List.of();
+        } else {
+            return ResponseEntity.badRequest().build();
         }
+
+        List<ProductDTO> result = productos.stream()
+                .map(ProductMapper::toDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
+
 
     @GetMapping
     public List<ProductDTO> getAll() {
@@ -82,7 +94,7 @@ public class ProductController {
     }
 
     @PatchMapping("/edit/{id}")
-    public ResponseEntity<?> putProduct(@PathVariable Long id) {
+    public ResponseEntity<?> patchProduct(@PathVariable Long id) {
         try {
             productUseCase.updateState(id);
             return ResponseEntity.status(HttpStatus.OK).body("Updated product!");
@@ -94,6 +106,46 @@ public class ProductController {
             }
 
             // Otros errores por defecto
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
+        }
+    }
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<?> putProduct(@RequestBody ProductCreateDTO productDTO, @PathVariable Long id) {
+        try {
+            Optional<User> userOpt = Optional.ofNullable(user.searchbyID(productDTO.getIdUsuario()));
+
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+            return productUseCase.updateAll(ProductMapper.toDomain(productDTO, userOpt.get()), id);
+
+        } catch (IllegalArgumentException e) {
+            String mensaje = e.getMessage();
+
+            if ("No existe el producto!".equals(mensaje)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+            }
+
+            // Otros errores por defecto
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
+        }
+    }
+
+    @PatchMapping("/reserve/{id}")
+    public ResponseEntity<?> patchProductreserve(@PathVariable Long id) {
+        try {
+            productUseCase.updateAmount(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Reserve product!");
+        } catch (IllegalArgumentException e) {
+            String mensaje = e.getMessage();
+
+            if ("No existe el Producto!".equals(mensaje)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensaje);
+            }
+            if ("Stock insuficiente!".equals(mensaje)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(mensaje);
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
         }
     }

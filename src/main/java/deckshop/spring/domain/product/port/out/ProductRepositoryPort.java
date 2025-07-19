@@ -10,4 +10,6 @@ public interface ProductRepositoryPort {
     List<Product> findAll();
     void save(Product product);
     void removeProductBD(Long id);
+    List<Product> findByNombreContainingIgnoreCase(String nombre);
+    List<Product> findByIdOrNombreContainingIgnoreCase(Long id, String nombre);
 }

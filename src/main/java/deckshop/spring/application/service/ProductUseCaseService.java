@@ -28,6 +28,16 @@ public class ProductUseCaseService  implements ManageProductUseCase {
     }
 
     @Override
+    public List<Product> searchByNombre(String nombre) {
+        return repository.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
+    public List<Product> searchByIdOrNombre(Long id, String nombre) {
+        return repository.findByIdOrNombreContainingIgnoreCase(id, nombre);
+    }
+
+    @Override
     public List<Product> getAll() {
         return repository.findAll();
     }
@@ -61,6 +71,38 @@ public class ProductUseCaseService  implements ManageProductUseCase {
         if (product != null){
             product.setEstadoDePublicacion("PAUSADA");
             repository.save(product);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> updateAll(Product productbody, Long id) {
+        Product product = searchbyID(id);
+        if (productbody.getPrecio().compareTo(BigDecimal.ZERO) <= 0 || productbody.getCantidad() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los valores numéricos deben ser mayores a cero!");
+        }
+
+        if (product != null){
+            productbody.setId(id);
+            repository.save(productbody);
+            return ResponseEntity.status(HttpStatus.OK).body("Updated product!");
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void updateAmount(Long id) {
+        Product product = searchbyID(id);
+        if (product != null){
+            // Tendria que agregar hilos o algun lock para controlar esto?
+            if (product.getCantidad() > 0 ){
+                product.setCantidad(product.getCantidad() - 1);
+                repository.save(product);
+            } else {
+                throw new IllegalArgumentException("Stock insuficiente!");
+            }
         } else {
             throw new IllegalArgumentException();
         }
